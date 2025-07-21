@@ -12,10 +12,10 @@ from ingestion import merge_multiple_dataframe
 from training import FEATURE_COLS, TARGET_COL
 
 #################Load config.json and get path variables
-with open('config.json','r') as f:
-    config = json.load(f) 
+with open('config.json', 'r') as f:
+    config = json.load(f)
 
-model_path = os.path.join(config['output_model_path'], config['training_model_filename'])
+model_path = os.path.join(config['output_model_path'], config['trained_model_filename'])
 
 
 def read_test_data():
@@ -25,13 +25,13 @@ def read_test_data():
 
 #################Function for model scoring
 def score_model():
-    #this function should take a trained model, load test data, and calculate an F1 score for the model relative to the test data
-    #it should write the result to the latestscore.txt file
+    # this function should take a trained model, load test data, and calculate an F1 score for the model relative to the test data
+    # it should write the result to the latestscore.txt file
     try:
-        with open(model_path,'r') as f:
+        with open(model_path, 'rb') as f:
             model = pickle.load(f)
             df = read_test_data()
-            x = df.loc[:, FEATURE_COLS].values.reshape(-1, 2)
+            x = df.loc[:, FEATURE_COLS].values
             Y = df[TARGET_COL].values.reshape(-1, 1).ravel()
 
             predicted = model.predict(x)
@@ -45,6 +45,9 @@ def score_model():
 def create_log_for_f1_score(score):
     fullpath = os.path.join(config['output_model_path'], 'latestscore.txt')
 
-    with open(fullpath,'w') as f:
-        f.write(score)
+    with open(fullpath, 'w') as f:
+        f.write(str(score))
 
+
+if __name__ == '__main__':
+    score_model()

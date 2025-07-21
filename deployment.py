@@ -20,15 +20,16 @@ prod_deployment_path = os.path.join(config['prod_deployment_path'])
 
 
 ####################function for deployment
-def store_model_into_pickle(model):
+def store_model_into_pickle():
     #copy the latest pickle file, the latestscore.txt value, and the ingestfiles.txt file into the deployment directory
     try:
         # Copy the file to the destination folder
-        shutil.copy2('/practicemodels/latestscore.txt', config['prod_deployment_path'])
-        shutil.copy2('/ingesteddata/ingestfiles.txt', config['prod_deployment_path'])
-        shutil.copy2('/practicemodels/trainedmodel.pkl', config['prod_deployment_path'])
+        shutil.copy2('./practicemodels/latestscore.txt', config['prod_deployment_path'])
+        shutil.copy2('./ingesteddata/ingestedfiles.txt', config['prod_deployment_path'])
+        shutil.copy2('./practicemodels/trainedmodel.pkl', config['prod_deployment_path'])
     except Exception as e:
         print(f"An error occurred: {e}")
         
         
-
+if __name__ == "__main__":
+    store_model_into_pickle()

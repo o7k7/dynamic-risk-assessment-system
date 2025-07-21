@@ -3,6 +3,7 @@
   "output_folder_path": "ingesteddata",
   "test_data_path": "testdata",
   "output_model_path": "practicemodels",
+  "prod_model_path": "production_deployment",
   "prod_deployment_path": "production_deployment",
   "training_data_filename": "finaldata.csv",
   "trained_model_filename": "trainedmodel.pkl"
