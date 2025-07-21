@@ -15,13 +15,13 @@ input_folder_path = config['input_folder_path']
 output_folder_path = config['output_folder_path']
 
 
-def read_and_log_files_of_input_folder() -> List[pd.DataFrame]:
+def read_and_log_files_of_input_folder(path: str, create_record_file: bool = False) -> List[pd.DataFrame]:
     df_list = []
     file_names = []
-    if os.path.exists(input_folder_path) and os.path.isdir(input_folder_path):
-        for filename in os.listdir(input_folder_path):
+    if os.path.exists(path) and os.path.isdir(path):
+        for filename in os.listdir(path):
             if filename.endswith(".csv"):
-                full_path = os.path.join(input_folder_path, filename)
+                full_path = os.path.join(path, filename)
                 file_names.append(filename)
                 try:
                     with open(full_path, 'r') as f:
@@ -31,16 +31,17 @@ def read_and_log_files_of_input_folder() -> List[pd.DataFrame]:
                 except Exception as e:
                     Logger.error(f"Could not read file {full_path}: {e}")
 
-        create_record(file_names)
+        if create_record_file:
+            create_record(file_names)
 
         return df_list
     else:
-        raise Exception(f"folder {input_folder_path} doesn't exist")
+        raise Exception(f"folder {path} doesn't exist")
 
 
 #############Function for data ingestion
-def merge_multiple_dataframe() -> pd.DataFrame:
-    df_list = read_and_log_files_of_input_folder()
+def merge_multiple_dataframe(path: str, create_record_file: bool = False) -> pd.DataFrame:
+    df_list = read_and_log_files_of_input_folder(path, create_record_file=create_record_file)
     if len(df_list) == 1:
         return df_list[0]
 
@@ -74,6 +75,6 @@ def create_record(list_of_files_read: List[str]):
 
 
 if __name__ == '__main__':
-    final_df = merge_multiple_dataframe()
+    final_df = merge_multiple_dataframe(input_folder_path, create_record_file=True)
     deduped_df = final_df.drop_duplicates()
     write_output(deduped_df)
