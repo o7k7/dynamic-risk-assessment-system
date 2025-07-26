@@ -19,10 +19,10 @@ with open('config.json', 'r') as f:
 
 
 ##############Function for reporting
-def score_model():
+def generate_confusion_matrix():
     # calculate a confusion matrix using the test data and the deployed model
     # write the confusion matrix to the workspace
-    df = read_test_data()
+    df = read_test_data(config['input_folder_path'])
 
     X_test = df.drop(columns=['exited', 'corporation'], axis=1)
     y_true = df['exited']
@@ -31,7 +31,7 @@ def score_model():
     cm = confusion_matrix(y_true, y_pred)
     display = ConfusionMatrixDisplay(confusion_matrix=cm)
 
-    plot_path = os.path.join(config['output_model_path'], 'confusionmatrix.png')
+    plot_path = os.path.join(config['output_model_path'], 'confusionmatrix2.png')
 
     display.plot()
 
@@ -39,4 +39,4 @@ def score_model():
 
 
 if __name__ == '__main__':
-    score_model()
+    generate_confusion_matrix()

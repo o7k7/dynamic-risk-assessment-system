@@ -1,8 +1,8 @@
+import logging
 import pickle
 import subprocess
 import sys
 import time
-from logging import Logger
 from typing import List
 
 import pandas as pd
@@ -29,7 +29,7 @@ def model_predictions(df: pd.DataFrame) -> List:
 
             return predictions.tolist()
     except Exception as e:
-        Logger.error(f"Model prediction error: {e}")
+        logging.error(logging.ERROR, f"Model prediction error: {e}")
         return []
 
 
@@ -83,7 +83,7 @@ def execution_time():
 
 
 ##################Function to check dependencies
-def outdated_packages_list():
+def outdated_packages_list() -> str:
     try:
         result = subprocess.run(
             [sys.executable, '-m', 'pip', 'list', '--outdated'],
@@ -94,10 +94,13 @@ def outdated_packages_list():
 
         if result.stdout.strip():
             print(result.stdout)
+            return result.stdout
         else:
             print("All packages are up-to-date.")
+            return 'All packages are up-to-date.'
     except Exception as e:
-        Logger.error(f"Unable to find outdated packages: {e}")
+        logging.error(f"Unable to find outdated packages: {e}")
+        return None
 
 
 if __name__ == '__main__':

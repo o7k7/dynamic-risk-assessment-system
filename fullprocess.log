@@ -1,0 +1,6 @@
+2025-07-25 21:28:43,839 - INFO - Starting fullprocess.py script
+2025-07-25 21:28:43,839 - INFO - New data found at sourcedata. Running ingestion.
+2025-07-25 21:28:44,274 - INFO - Checking for model drift
+2025-07-25 21:28:44,274 - INFO - Last deployed score = 0.5714285714285715
+2025-07-25 21:28:45,208 - INFO - New model score = 0.6923076923076923
+2025-07-25 21:28:45,208 - INFO - No model drift detected. Exiting process.

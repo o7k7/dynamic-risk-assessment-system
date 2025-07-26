@@ -1,13 +1,16 @@
-from flask import Flask, session, jsonify, request
 import pandas as pd
 import numpy as np
 import pickle
 import os
 import io
 from sklearn import metrics
+from sklearn.compose import ColumnTransformer
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 import json
+
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder
 
 ###################Load config.json and get path variables
 with open('config.json', 'r') as f:
@@ -34,23 +37,25 @@ def read_data() -> pd.DataFrame:
 #################Function for training the model
 def train_model():
     # use this logistic regression for training
-    logit = LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,
-                               intercept_scaling=1, l1_ratio=None, max_iter=100,
-                               multi_class='auto', n_jobs=None, penalty='l2',
-                               random_state=0, solver='liblinear', tol=0.0001, verbose=0,
-                               warm_start=False)
-
     df = read_data()
 
-    X = df.loc[:, FEATURE_COLS].values
-    y = df[TARGET_COL].values.reshape(-1, 1).ravel()
+    X = df.loc[:, FEATURE_COLS]
+    y = df[TARGET_COL]
 
-    # fit the logistic regression to your data
-    model = logit.fit(X, y)
+    preprocessor = ColumnTransformer(
+        transformers=[
+            ('num', 'passthrough', FEATURE_COLS),
+        ])
 
+    model_pipeline = Pipeline(steps=[
+        ('preprocessor', preprocessor),
+        ('classifier', LogisticRegression(multi_class='auto', solver='liblinear'))
+    ])
+
+    model_pipeline.fit(X, y)
     # write the trained model to your workspace in a file called trainedmodel.pkl
     with open(model_path, 'wb') as file:
-        pickle.dump(model, file)
+        pickle.dump(model_pipeline, file)
 
 
 if __name__ == '__main__':

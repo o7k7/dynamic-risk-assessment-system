@@ -1,0 +1,1 @@
+*/10 * * * * cd /home/workspace && /data/bin/python fullprocess.py >> /home/workspace/fullprocess.log 2>&1

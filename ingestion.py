@@ -1,4 +1,4 @@
-from logging import Logger
+import logging
 from typing import List
 
 import pandas as pd
@@ -29,7 +29,7 @@ def read_and_log_files_of_input_folder(path: str, create_record_file: bool = Fal
 
                         df_list.append(pd.read_csv(io.StringIO(content)))
                 except Exception as e:
-                    Logger.error(f"Could not read file {full_path}: {e}")
+                    logging.error(logging.ERROR, f"Could not read file {full_path}: {e}")
 
         if create_record_file:
             create_record(file_names)
@@ -67,7 +67,6 @@ def create_record(list_of_files_read: List[str]):
     full_path = os.path.join(output_folder_path, "ingestedfiles.txt")
     try:
         with open(full_path, 'w') as f:
-            f.write(datetime.now().isoformat() + '\n')
             for file_name in list_of_files_read:
                 f.write(file_name + '\n')
     except Exception as e:
